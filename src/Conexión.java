@@ -1,3 +1,7 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class Conexión {
 
     static String server = "localhost";
@@ -17,5 +21,8 @@ public class Conexión {
                 server, port, database, user, password
         );
     }
-
+    public static Connection getConexion() throws SQLException {
+        System.out.println("Conectando a la base de datos");
+        return DriverManager.getConnection(getCadenaConexion());
+    }
 }
