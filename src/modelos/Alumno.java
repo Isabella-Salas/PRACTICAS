@@ -3,6 +3,7 @@ package modelos;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +56,29 @@ public class Alumno {
             }
             return alumnos;
         }
+    }
+    public int update() throws SQLException {
+        try(
+                Connection connection = Conexión.getConexion();
+                PreparedStatement stmt = connection.prepareStatement("UPDATE Alumnos SET nombre = ? WHERE matricula = ?");
+        )
+        {
+            stmt.setString(1, this.nombre);
+            stmt.setInt(2, this.id);
+            return stmt.executeUpdate();
+        }
+    }
+
+    public static int deletebyMatricula(String matricula) throws Exception{
+        try(
+                Connection connection = Conexión.getConexion();
+                PreparedStatement stmt = connection.prepareStatement("DELETE FROM Alumnos WHERE matricula = ?");
+        )
+        {
+            stmt.setString(1, matricula);
+            return stmt.executeUpdate();
+        }
+
     }
 
     //getters y setters
