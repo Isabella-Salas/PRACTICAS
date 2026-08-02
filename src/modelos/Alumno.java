@@ -81,6 +81,22 @@ public class Alumno {
 
     }
 
+    public static int countBySex(String sexo) throws Exception {
+        int total = 0;
+        try (Connection con = Conexión.getConexion();
+             PreparedStatement stmt = con.prepareStatement("SELECT COUNT(*) FROM Alumnos WHERE sexo = ?"))
+        {
+            stmt.setString(1, sexo);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    total = rs.getInt(1);
+                }
+            }
+        }
+        return total;
+    }
+
     //getters y setters
     public int getId() {
         return id;
