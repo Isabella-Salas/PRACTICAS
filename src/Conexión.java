@@ -6,5 +6,16 @@ public class Conexión {
     static String user = "sa";
     static String password = "isa2006";
 
+    public static String getCadenaConexion(){
+        return String.format(
+                "jdbc:sqlserver://%s:%s;" +
+                        "databaseName=%s;" +
+                        "user=%s;" +
+                        "password=%s;" +
+                        "encrypt=true;" +
+                        "trustServerCertificate=true;",
+                server, port, database, user, password
+        );
+    }
 
 }
