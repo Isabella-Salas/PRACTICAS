@@ -45,15 +45,13 @@ public class Main {
                     Alumno alumnonuevo = Alumno.findbyid(idModificar);
 
                     if (alumnonuevo == null) {
-                        System.out.println("No existe un alumno con ese ID.");
+                        System.out.println("No existe un alumno con ese id.");
                         break;
                     }
                     System.out.println("Alumno encontrado: " + alumnonuevo.getNombre());
-                    System.out.println("Deja en blanco si no quieres cambiar el dato.");
-
-                    System.out.print("Nuevo nombre [" + alumnonuevo.getNombre() + "]: ");
+                    System.out.println("Nuevo nombre " + alumnonuevo.getNombre());
                     String nuevoNombre = sc.nextLine();
-                    if (!nuevoNombre.isEmpty()) {
+                    if (nuevoNombre.isEmpty()) {
                         alumnonuevo.setNombre(nuevoNombre);
                     }
                     break;
