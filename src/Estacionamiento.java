@@ -18,11 +18,9 @@ public class Estacionamiento {
         for (Vehiculo v : vehiculos) {
             double costo = v.calcularCostoEstacionamiento();
             totalRecaudado += costo;
-            System.out.printf("ID: %d | Placa: %s | Horas: %d | Tipo: %s | Total: $%.2f USD%n",
-                    v.getId(), v.getPlaca(), v.getHoras_Estacionamiento(),
-                    v.getTarifa().getTipo(), costo);
+            System.out.println("id: " + v.getId() + " - placa: " + v.getPlaca() + " - costo: " + costo + "");
         }
-        System.out.printf("Reporte total: ", totalRecaudado);
+        System.out.println("Total :" + totalRecaudado);
     }
 }
 
