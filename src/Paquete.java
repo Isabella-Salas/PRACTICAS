@@ -3,12 +3,12 @@ import modelos.Conexión;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Paquete {
 
-    private int id;
+    private static int id;
     private String nombreDestinatario;
     private double pesoKg;
     private EstrategiaEnvio estrategia;
@@ -24,7 +24,7 @@ public class Paquete {
         this.pesoKg = pesoKg;
         this.estrategia = estrategia;
     }
-    public void save()throws Exception {
+    public boolean save()throws Exception {
         try(
                 Connection conn = Conexión.getConexion();
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO Paquetes(nombreDestinatario,pesoKg,tipoEnvio) values (?,?,?)", java.sql.Statement.RETURN_GENERATED_KEYS)
@@ -39,12 +39,53 @@ public class Paquete {
                 this.id = rs.getInt(1);
             }
         }
+        return false;
     }
+    public static List<Paquete> getAll() throws Exception {
+        List<Paquete> paquetes = new ArrayList<>();
 
+        try (
+                Connection connection = Conexión.getConexion();
+                PreparedStatement stmt = connection.prepareStatement("SELECT * FROM paquetes");
+                ResultSet rs = stmt.executeQuery()
+        ) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String destinatario = rs.getString("nombre_destinatario");
+                double pesoKg = rs.getDouble("peso_kg");
+                String tipo = rs.getString("tipo_envio");
 
+                EstrategiaEnvio estrategiaEnvio;
+                switch (tipo) {
+                    case "EXPRESS":
+                        estrategiaEnvio = new EnvioExpress();
+                        break;
+                    case "INTERNACIONAL":
+                        estrategiaEnvio = new EnvioInternacional();
+                        break;
+                    default:
+                        estrategiaEnvio = new EnvioEstandar();
+                        break;
+                }
 
+                Paquete paquete = new Paquete(id, destinatario, pesoKg, estrategiaEnvio);
+                paquetes.add(paquete);
+            }
+        }
 
+        return paquetes;
+    }
+    public static int delete(String nombreDestinatario) throws Exception{ //este borra solo uno
+        try(
+                Connection connection = Conexión.getConexion();
+                PreparedStatement stmt = connection.prepareStatement("DELETE FROM paquetes WHERE nombreDestinatario = ?");
+        )
+        {
+            stmt.setString(1, nombreDestinatario);
+            return stmt.executeUpdate();
+        }
 
+    }
     public double calcularCosto(){
         return this.estrategia.calcularCosto(this.pesoKg);
     }
