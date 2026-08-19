@@ -1,13 +1,13 @@
 import modelos.Alumno;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-
-        //Falta por investigar como hare el main con lo de bd, pero mientras dejare el menu
+    public static void main(String[] args) throws Exception {
 
         Scanner sc = new Scanner(System.in);
+        Estacionamiento estacionamiento = new Estacionamiento();
 
         int op;
         do {
@@ -19,15 +19,33 @@ public class Main {
             int opcion = sc.nextInt();
             switch (opcion){
                 case 1:
+                    System.out.println("Ingrese la placa del vehiculo: ");
+                    String placa1 = sc.next();
+                    System.out.println("Ingrese las horas de estacionamiento: ");
+                    int horas = sc.nextInt();
+                    System.out.println("Ingrese el tipo de vehiculo: ");
+                    String tipo = sc.next();
+                    Vehiculo v = new Vehiculo(placa1, horas, new TarifaAuto());
+                    v.save();
 
                     break;
                 case 2:
+                    System.out.println("Lista de vehiculos registrados: ");
+                    List<Vehiculo> vehiculos = Vehiculo.getAll();
+                    for (Vehiculo ve : vehiculos) {
+                        System.out.println(ve);
+                    }
 
                     break;
                 case 3:
+                    System.out.println("Ingrese la placa del vehiculo que desea eliminar: ");
+                    String placa = sc.next();
+                    Vehiculo.deletebyPlaca(placa);
 
                     break;
                 case 4:
+                    System.out.println("Reporte de vehiculos: ");
+                    estacionamiento.imprimirReporte();
 
                     break;
                 case 5:
