@@ -11,12 +11,11 @@ public class Main {
 
         int op;
         do {
-            System.out.println("1. registrar un alumno ");
-            System.out.println("2. imprimir todos los alumnos registrados");
-            System.out.println("3. modificar a un alumno por matricula");
-            System.out.println("4. eliminar un alumno por matricula");
-            System.out.println("5. Mostar cantidad de alumnos por sexo");
-            System.out.println("6. Salir");
+            System.out.println("1. registrar un carro ");
+            System.out.println("2. imprimir todos los carros registrados");
+            System.out.println("3. eliminar un carro por placa");
+            System.out.println("4. Reporte");
+            System.out.println("5. Salir");
             int opcion = sc.nextInt();
             switch (opcion){
                 case 1:
@@ -32,6 +31,7 @@ public class Main {
 
                     break;
                 case 5:
+                    System.out.println("Saliendo del programa");
 
                     break;
             }
