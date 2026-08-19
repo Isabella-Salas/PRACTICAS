@@ -15,7 +15,14 @@ public class Alumno {
     private String sexo;
     private String correo;
 
-    public Alumno(int id, String matricula, String nombre, int edad, String sexo, String correo) throws Exception{
+    public Alumno(String matricula, String nombre, int edad, String sexo, String correo) throws Exception{
+        this.matricula = matricula;
+        this.nombre = nombre;
+        this.edad = edad;
+        this.sexo = sexo;
+        this.correo = correo;
+    }
+    private Alumno(int id, String matricula, String nombre, int edad, String sexo, String correo) throws Exception{
         this.id = id;
         this.matricula = matricula;
         this.nombre = nombre;
@@ -24,13 +31,18 @@ public class Alumno {
         this.correo = correo;
     }
 
+
     //metodos
     public void save()throws Exception {
         try (Connection connection = Conexión.getConexion();
-             PreparedStatement stmt = connection.prepareStatement(("INSERT INTO Alumnos(nombre) values (?)  "), java.sql.Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement stmt = connection.prepareStatement(("INSERT INTO Alumno(matricula,nombre,edad,sexo,correo) values (?,?,?,?,?)  "), java.sql.Statement.RETURN_GENERATED_KEYS);
              // el java sql es para que regresa la llave que se genero
         ) {
-            stmt.setString(1, this.nombre); // this. nombre se saca del atributo del objeto alumno
+            stmt.setString(1, this.matricula);
+            stmt.setInt(3, this.edad);
+            stmt.setString(4, this.sexo);
+            stmt.setString(5, this.correo);
+            stmt.setString(2, this.nombre); // this. nombre se saca del atributo del objeto alumno
             stmt.executeUpdate(); //avisa que traiga las fk
             ResultSet rs = stmt.getGeneratedKeys(); //dame las llaves foraneas que trajiste y genera el result set
             {
@@ -95,6 +107,21 @@ public class Alumno {
             }
         }
         return total;
+    }
+    public static Alumno findbyid(int id) throws Exception{
+        try (
+                Connection connection = Conexión.getConexion();
+                PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Alumnos WHERE id = ?");
+                ){
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Alumno(rs.getInt("id"),(rs.getString("matricula")),
+                        (rs.getString("nombre")),(rs.getInt("edad")),
+                        (rs.getString("sexo")),(rs.getString("correo")));
+            }
+        }
+        return null;
     }
 
     //getters y setters
